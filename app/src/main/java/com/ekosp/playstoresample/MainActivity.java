@@ -1,7 +1,7 @@
 package com.ekosp.playstoresample;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 1; i <= 20; i++) {
             SectionDataModel dm = new SectionDataModel();
             dm.setHeaderTitle("Section " + i);
+            dm.setSectionType(i%2);
             ArrayList<SingleItemModel> singleItemModels = new ArrayList<>();
             for (int j = 1; j <= 20; j++) {
                 singleItemModels.add(new SingleItemModel("Item " + j, "URL " + j));

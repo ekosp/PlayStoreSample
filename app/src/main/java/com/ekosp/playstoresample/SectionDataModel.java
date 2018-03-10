@@ -9,6 +9,12 @@ package com.ekosp.playstoresample;
 import java.util.ArrayList;
 
 public class SectionDataModel {
+
+    public static final int NORMAL_TYPE = 0;
+    public static final int CATEGORY_TYPE = 1;
+    public static final int PROMO_TYPE = 2;
+
+    private int sectionType;
     private String headerTitle;
     private ArrayList<SingleItemModel> allItemInSection;
 
@@ -18,6 +24,21 @@ public class SectionDataModel {
     public SectionDataModel(String headerTitle, ArrayList<SingleItemModel> allItemInSection) {
         this.headerTitle = headerTitle;
         this.allItemInSection = allItemInSection;
+        this.sectionType = 0;
+    }
+
+    public SectionDataModel(int sectionType, String headerTitle, ArrayList<SingleItemModel> allItemInSection) {
+        this.headerTitle = headerTitle;
+        this.allItemInSection = allItemInSection;
+        this.sectionType = sectionType;
+    }
+
+    public int getSectionType() {
+        return sectionType;
+    }
+
+    public void setSectionType(int sectionType) {
+        this.sectionType = sectionType;
     }
 
     public String getHeaderTitle() {

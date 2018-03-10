@@ -21,15 +21,29 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
 
     private ArrayList<SingleItemModel> itemModels;
     private Context mContext;
+    private int sectionType;
 
-    public SectionListDataAdapter(ArrayList<SingleItemModel> itemModels, Context mContext) {
+    public SectionListDataAdapter(ArrayList<SingleItemModel> itemModels, Context mContext, int sectionType) {
         this.itemModels = itemModels;
         this.mContext = mContext;
+        this.sectionType = sectionType;
     }
 
     @Override
     public SingleItemRowHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_single_card, null);
+        View v = null;
+        switch (sectionType){
+            case SectionDataModel.NORMAL_TYPE :
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_single_card, null);
+                break;
+            case SectionDataModel.CATEGORY_TYPE :
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_single_card_category, null);
+                break;
+            case SectionDataModel.PROMO_TYPE :
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_single_card, null);
+                break;
+        }
+
         SingleItemRowHolder singleItemRowHolder = new SingleItemRowHolder(v);
         return singleItemRowHolder;
     }
