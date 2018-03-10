@@ -23,7 +23,7 @@ import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 
 import java.util.ArrayList;
 
-public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private ArrayList<SectionDataModel> dataList;
     private Context mContext;
@@ -36,14 +36,6 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerView.V
         recycledViewPool = new RecyclerView.RecycledViewPool();
     }
 
-    /*@Override
-    public ItemRowHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, null);
-        ItemRowHolder rowHolder = new ItemRowHolder(v);
-        snapHelper = new GravitySnapHelper(Gravity.START);
-        return rowHolder;
-    }*/
-
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
 
@@ -52,13 +44,21 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerView.V
         snapHelper = new GravitySnapHelper(Gravity.START);
 
         switch (viewType) {
+            case SectionDataModel.SLIDER_TYPE:
+                View v3 = inflater.inflate(R.layout.section_row_item, viewGroup, false);
+                viewHolder = new ItemSliderHolder(v3);
+                break;
             case SectionDataModel.NORMAL_TYPE:
-                View v1 = inflater.inflate(R.layout.list_item, viewGroup, false);
+                View v1 = inflater.inflate(R.layout.section_row_item, viewGroup, false);
                 viewHolder = new ItemRowHolder(v1);
                 break;
             case SectionDataModel.CATEGORY_TYPE:
-                View v2 = inflater.inflate(R.layout.list_item, viewGroup, false);
+                View v2 = inflater.inflate(R.layout.section_row_item, viewGroup, false);
                 viewHolder = new ItemRowHolder2(v2);
+                break;
+            case SectionDataModel.PROMO_TYPE:
+                View v4 = inflater.inflate(R.layout.section_row_item, viewGroup, false);
+                viewHolder = new ItemRowHolder(v4);
                 break;
             default:
                 View v = inflater.inflate(android.R.layout.simple_list_item_1, viewGroup, false);
@@ -78,6 +78,8 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerView.V
                 return SectionDataModel.CATEGORY_TYPE;
             case 2:
                 return SectionDataModel.PROMO_TYPE;
+           case 3:
+                return SectionDataModel.SLIDER_TYPE;
             default:
                 return -1;
         }
@@ -96,14 +98,37 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerView.V
                 break;
             case SectionDataModel.PROMO_TYPE:
                 ItemRowHolder vh = (ItemRowHolder) viewHolder;
-                configureItemHolder(vh, position, SectionDataModel.PROMO_TYPE);
+                configurePromoHolder(vh, position, SectionDataModel.PROMO_TYPE);
+                break;
+            case SectionDataModel.SLIDER_TYPE:
+                ItemSliderHolder vh3 = (ItemSliderHolder) viewHolder;
+                configureSliderHolder(vh3, position, SectionDataModel.PROMO_TYPE);
                 break;
         }
     }
 
     private void configureItemHolder(ItemRowHolder holder, int position, int type) {
         final String sectionName = dataList.get(position).getHeaderTitle()
-                +" NORMAL TYPE";
+                + " NORMAL TYPE";
+        ArrayList singleSectionItems = dataList.get(position).getAllItemInSection();
+        holder.itemTitle.setText(sectionName);
+        SectionListDataAdapter adapter = new SectionListDataAdapter(singleSectionItems, mContext, type);
+        holder.recyclerView.setHasFixedSize(true);
+        holder.recyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
+        holder.recyclerView.setAdapter(adapter);
+        holder.recyclerView.setRecycledViewPool(recycledViewPool);
+        snapHelper.attachToRecyclerView(holder.recyclerView);
+        holder.btnMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(view.getContext(), "Button More Clicked!" + sectionName, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void configurePromoHolder(ItemRowHolder holder, int position, int type) {
+        final String sectionName = dataList.get(position).getHeaderTitle()
+                + " PROMO TYPE";
         ArrayList singleSectionItems = dataList.get(position).getAllItemInSection();
         holder.itemTitle.setText(sectionName);
         SectionListDataAdapter adapter = new SectionListDataAdapter(singleSectionItems, mContext, type);
@@ -122,7 +147,7 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     private void configureItemHolder2(ItemRowHolder2 holder, int position, int type) {
         final String sectionName = dataList.get(position).getHeaderTitle()
-                +" CATEGORY TYPE";
+                + " CATEGORY TYPE";
         ArrayList singleSectionItems = dataList.get(position).getAllItemInSection();
         holder.itemTitle.setText(sectionName);
         SectionListDataAdapter adapter = new SectionListDataAdapter(singleSectionItems, mContext, type);
@@ -130,9 +155,7 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerView.V
 
         GridLayoutManager mLayoutManager =
                 new GridLayoutManager(mContext, 2, GridLayoutManager.HORIZONTAL, false);
-       // LinearLayoutManager mLayoutManager = new GridLayoutManager(mContext, 2);
-       holder.recyclerView.setLayoutManager(mLayoutManager);
-       // holder.recyclerView.setLayoutManager(new LinearLayoutManager(mContext, GridLayoutManager.HORIZONTAL, false));
+        holder.recyclerView.setLayoutManager(mLayoutManager);
 
         holder.recyclerView.setAdapter(adapter);
         holder.recyclerView.setRecycledViewPool(recycledViewPool);
@@ -145,24 +168,43 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerView.V
         });
     }
 
-  /*  @Override
-    public void onBindViewHolder(ItemRowHolder holder, int position) {
-        final String sectionName = dataList.get(position).getHeaderTitle();
-        ArrayList singleSectionItems = dataList.get(position).getAllItemInSection();
+    private void configureSliderHolder(final ItemSliderHolder holder, int position, int type) {
+        final String sectionName = dataList.get(position).getHeaderTitle()
+                + " SLIDER TYPE";
+      //  ArrayList singleSectionItems = dataList.get(position).getAllItemInSection();
         holder.itemTitle.setText(sectionName);
-        SectionListDataAdapter adapter = new SectionListDataAdapter(singleSectionItems, mContext);
-        holder.recyclerView.setHasFixedSize(true);
-        holder.recyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
-        holder.recyclerView.setAdapter(adapter);
-        holder.recyclerView.setRecycledViewPool(recycledViewPool);
-        snapHelper.attachToRecyclerView(holder.recyclerView);
-        holder.btnMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(view.getContext(), "Button More Clicked!" + sectionName, Toast.LENGTH_SHORT).show();
+       /*final int[] currentPage = {0};
+        final Integer[] XMEN= {R.drawable.aa,R.drawable.keima_katsuragi_chibi,
+                R.drawable.aa,R.drawable.keima_katsuragi_chibi,R.drawable.aa};
+        ArrayList<Integer> XMENArray = new ArrayList<Integer>();
+
+        for(int i=0;i<XMEN.length;i++)
+            XMENArray.add(XMEN[i]);
+
+        holder.mPager.setAdapter(new MyAdapter(mContext,XMENArray));
+        holder.indicator.setViewPager(holder.mPager);
+        holder.mPager.setCurrentItem(currentPage[0]++, true);
+        */
+
+        /*
+        // Auto start of viewpager
+        final Handler handler = new Handler();
+        final Runnable Update = new Runnable() {
+            public void run() {
+                if (currentPage[0] == XMEN.length) {
+                    currentPage[0] = 0;
+                }
+                holder.mPager.setCurrentItem(currentPage[0]++, true);
             }
-        });
-    }*/
+        };
+        Timer swipeTimer = new Timer();
+        swipeTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(Update);
+            }
+        }, 3000, 3000);*/
+    }
 
     @Override
     public int getItemCount() {
@@ -192,6 +234,21 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerView.V
             this.itemTitle = itemView.findViewById(R.id.itemTitle);
             this.recyclerView = itemView.findViewById(R.id.recycler_view_list);
             this.btnMore = itemView.findViewById(R.id.btnMore);
+        }
+    }
+
+    public class ItemSliderHolder extends RecyclerView.ViewHolder {
+        protected TextView itemTitle;
+        protected RecyclerView recyclerView;
+        protected Button btnMore;
+
+        public ItemSliderHolder(View itemView) {
+            super(itemView);
+            this.itemTitle = itemView.findViewById(R.id.itemTitle);
+            this.btnMore = itemView.findViewById(R.id.btnMore);
+            /* this.indicator = itemView.findViewById(R.id.indicator);
+            this.mPager = itemView.findViewById(R.id.pager);*/
+
         }
     }
 }

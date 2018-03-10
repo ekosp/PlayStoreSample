@@ -34,13 +34,16 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
         View v = null;
         switch (sectionType){
             case SectionDataModel.NORMAL_TYPE :
-                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_single_card, null);
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_card, null);
                 break;
             case SectionDataModel.CATEGORY_TYPE :
-                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_single_card_category, null);
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_category_card, null);
                 break;
             case SectionDataModel.PROMO_TYPE :
-                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_single_card, null);
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_promo_card, null);
+                break;
+            case SectionDataModel.SLIDER_TYPE :
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_slider_card, null);
                 break;
         }
 

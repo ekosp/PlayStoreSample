@@ -39,7 +39,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:text="More"
+                android:text="Lihat Semua >"
                 android:textColor="#FFF" />
 
         </RelativeLayout>
@@ -47,7 +47,7 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view_list"
             android:layout_width="match_parent"
-            android:layout_height="220dp"
+            android:layout_height="300dp"
             android:layout_gravity="center_vertical"
             android:orientation="vertical" />
 

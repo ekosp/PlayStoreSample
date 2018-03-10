@@ -28,10 +28,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void createDummyData() {
-        for (int i = 1; i <= 20; i++) {
+        for (int i = 1; i <= 5; i++) {
             SectionDataModel dm = new SectionDataModel();
             dm.setHeaderTitle("Section " + i);
-            dm.setSectionType(i%2);
+            dm.setSectionType(i%4);
             ArrayList<SingleItemModel> singleItemModels = new ArrayList<>();
             for (int j = 1; j <= 20; j++) {
                 singleItemModels.add(new SingleItemModel("Item " + j, "URL " + j));

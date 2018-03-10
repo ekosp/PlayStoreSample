@@ -13,6 +13,7 @@ public class SectionDataModel {
     public static final int NORMAL_TYPE = 0;
     public static final int CATEGORY_TYPE = 1;
     public static final int PROMO_TYPE = 2;
+    public static final int SLIDER_TYPE = 3;
 
     private int sectionType;
     private String headerTitle;
